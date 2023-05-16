@@ -1,0 +1,19 @@
+version: "3.2"
+services:
+  katalon-agent:
+    image: "katalonstudio/agent"
+    restart: always
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      SERVER_URL: https://20.20.10.2
+      KATALON_USERNAME: hisyammudova25@gmail.com
+      AGENT_NAME: hnm-laundry
+      TEAM_ID: 1092185
+      KATALON_API_KEY: a1a7603d-6e86-435b-ac7f-03937b6f072a
+    volumes:
+      - katalon-runtime-engines:/root/.katalon
+
+volumes:
+  katalon-runtime-engines:

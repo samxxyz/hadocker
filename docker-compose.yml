@@ -1,0 +1,52 @@
+version: '3.9'
+services:
+  web:
+    ports:
+      - 8080:80
+      - 4443:443
+    image: hsym04/web-laundry
+    networks:
+      - laundry
+    deploy:
+      replicas: 3
+      placement:
+        constraints: [node.role == worker]
+
+  db:
+    ports:
+      - 3306:3306
+    image: hsym04/db-laundry
+    environment:
+      MYSQL_ROOT_PASSWORD: "hnmlaundry"
+      MYSQL_DATABASE: "laundry"
+    networks:
+      - laundry
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [node.role == worker]
+
+  haproxy:
+    ports:
+      - 80:80
+      - 8404:8404
+    image: hsym04/haproxy
+    configs:
+      - source: haproxy_cfg
+        target: /usr/local/etc/haproxy/haproxy.cfg
+        mode: 0440
+    dns: 127.0.0.11
+    networks:
+      - laundry
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
+
+networks:
+  laundry:
+    driver: overlay
+
+configs:
+  haproxy_cfg:
+    file: ./haproxy.cfg

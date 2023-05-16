@@ -1,0 +1,24 @@
+docker login
+Username : kevinmz
+Password : alhamdulilah baik
+
+1. build image dari setiap service
+    db:
+    - cd db
+    - docker build -t kevinmz/db-widan .
+    - docker push kevinmz/db-widan
+    haproxy:
+    - cd haproxy
+    - docker build -t kevinmz/haproxy .
+    - docker push kevinmz/haproxy
+    web:
+    - cd web
+    - docker build -t kevinmz/web-widan .
+    - docker push kevinmz/web-widan
+
+2. jalankan docker stack deploy
+    docker stack deploy -c docker-compose.yml widan
+    
+3. Cek apakah telah running
+    docker stack services widan
+    docker service ls
